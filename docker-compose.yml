@@ -1,0 +1,190 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: cat-fleetbrain-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - '3307:3306'
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/init-databases.sql:/docker-entrypoint-initdb.d/init-databases.sql
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      timeout: 20s
+      retries: 10
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.service
+      args:
+        SERVICE_PATH: services/api-gateway
+    container_name: cat-api-gateway
+    restart: always
+    ports:
+      - '5000:5000'
+    environment:
+      PORT: 5000
+      AUTH_SERVICE_URL: http://auth-service:5001
+      CRM_SERVICE_URL: http://crm-service:5002
+      FLEET_SERVICE_URL: http://fleet-service:5003
+      RENTAL_SERVICE_URL: http://rental-service:5004
+      ANALYTICS_SERVICE_URL: http://analytics-service:5005
+      AI_SERVICE_URL: http://ai-service:5006
+    depends_on:
+      - auth-service
+      - crm-service
+      - fleet-service
+      - rental-service
+      - analytics-service
+      - ai-service
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.service
+      args:
+        SERVICE_PATH: services/auth-service
+    container_name: cat-auth-service
+    restart: always
+    ports:
+      - '5001:5001'
+    environment:
+      PORT: 5001
+      SERVICE_NAME: auth-service
+      DB_DIALECT: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: auth_db
+      DB_USER: root
+      DB_PASSWORD: rootpassword
+      JWT_SECRET: cat_fleetbrain_super_secret_jwt_key_2026
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  crm-service:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.service
+      args:
+        SERVICE_PATH: services/crm-service
+    container_name: cat-crm-service
+    restart: always
+    ports:
+      - '5002:5002'
+    environment:
+      PORT: 5002
+      SERVICE_NAME: crm-service
+      DB_DIALECT: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: crm_db
+      DB_USER: root
+      DB_PASSWORD: rootpassword
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  fleet-service:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.service
+      args:
+        SERVICE_PATH: services/fleet-service
+    container_name: cat-fleet-service
+    restart: always
+    ports:
+      - '5003:5003'
+    environment:
+      PORT: 5003
+      SERVICE_NAME: fleet-service
+      DB_DIALECT: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: fleet_db
+      DB_USER: root
+      DB_PASSWORD: rootpassword
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  rental-service:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.service
+      args:
+        SERVICE_PATH: services/rental-service
+    container_name: cat-rental-service
+    restart: always
+    ports:
+      - '5004:5004'
+    environment:
+      PORT: 5004
+      SERVICE_NAME: rental-service
+      DB_DIALECT: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: rental_db
+      DB_USER: root
+      DB_PASSWORD: rootpassword
+      FLEET_SERVICE_URL: http://fleet-service:5003
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  analytics-service:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.service
+      args:
+        SERVICE_PATH: services/analytics-service
+    container_name: cat-analytics-service
+    restart: always
+    ports:
+      - '5005:5005'
+    environment:
+      PORT: 5005
+      SERVICE_NAME: analytics-service
+      DB_DIALECT: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: analytics_db
+      DB_USER: root
+      DB_PASSWORD: rootpassword
+      FLEET_SERVICE_URL: http://fleet-service:5003
+      RENTAL_SERVICE_URL: http://rental-service:5004
+      CRM_SERVICE_URL: http://crm-service:5002
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  ai-service:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.service
+      args:
+        SERVICE_PATH: services/ai-service
+    container_name: cat-ai-service
+    restart: always
+    ports:
+      - '5006:5006'
+    environment:
+      PORT: 5006
+      SERVICE_NAME: ai-service
+      DB_DIALECT: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: ai_db
+      DB_USER: root
+      DB_PASSWORD: rootpassword
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+volumes:
+  mysql_data:

@@ -1,0 +1,22 @@
+FROM node:20-alpine AS base
+
+WORKDIR /app
+
+# Install root dependencies for shared utilities
+COPY package*.json ./
+RUN npm install --only=production
+
+# Copy shared library
+COPY shared ./shared
+
+ARG SERVICE_PATH
+COPY ${SERVICE_PATH}/package*.json ./${SERVICE_PATH}/
+RUN cd ${SERVICE_PATH} && npm install --only=production
+
+COPY ${SERVICE_PATH} ./${SERVICE_PATH}
+
+WORKDIR /app/${SERVICE_PATH}
+
+EXPOSE 5000 5001 5002 5003 5004 5005 5006
+
+CMD ["node", "src/index.js"]

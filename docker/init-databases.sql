@@ -1,0 +1,11 @@
+-- Initialize Databases for Database-per-Service Architecture
+
+CREATE DATABASE IF NOT EXISTS `auth_db`;
+CREATE DATABASE IF NOT EXISTS `crm_db`;
+CREATE DATABASE IF NOT EXISTS `fleet_db`;
+CREATE DATABASE IF NOT EXISTS `rental_db`;
+CREATE DATABASE IF NOT EXISTS `analytics_db`;
+CREATE DATABASE IF NOT EXISTS `ai_db`;
+
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
+FLUSH PRIVILEGES;

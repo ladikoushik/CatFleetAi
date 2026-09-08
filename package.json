@@ -1,0 +1,24 @@
+{
+  "name": "cat-fleetbrain-platform",
+  "version": "2.0.0",
+  "description": "CAT FleetBrain AI Enterprise Microservices Architecture Platform",
+  "private": true,
+  "scripts": {
+    "start": "node scripts/start-backend.js",
+    "start:backend": "node scripts/start-backend.js",
+    "setup:mysql": "node scripts/setup-mysql.js",
+    "print:data": "node scripts/print-all-data.js",
+    "start:all": "concurrently \"node scripts/start-backend.js\" \"cd client && npm run dev\"",
+    "docker:up": "docker-compose up --build"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.9.8",
+    "sequelize": "^6.37.3",
+    "sqlite3": "^5.1.7"
+  }
+}

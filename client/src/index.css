@@ -1,0 +1,153 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 98%;          /* #FAFAFA */
+    --foreground: 0 0% 9%;           /* #171717 */
+    --card: 0 0% 100%;               /* #FFFFFF */
+    --card-foreground: 0 0% 9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 9%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;  /* #6B7280 */
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --border: 0 0% 89.8%;            /* #E5E7EB */
+    --input: 0 0% 89.8%;
+    --ring: 48 100% 53%;             /* CAT Yellow #FFCD11 */
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 0 0% 7%;           /* #121212 CAT Dark */
+    --foreground: 0 0% 98%;          /* #FAFAFA Opaque Text */
+    --card: 0 0% 12%;                /* #1E1E1E CAT Card Dark */
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 10%;             /* #1A1A1A CAT Black */
+    --popover-foreground: 0 0% 98%;
+    --secondary: 0 0% 15%;           /* #262626 */
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 63.9%;  /* #9CA3AF Visible Gray */
+    --accent: 0 0% 15%;
+    --accent-foreground: 0 0% 98%;
+    --border: 0 0% 20%;              /* #333333 */
+    --input: 0 0% 15%;
+    --ring: 48 100% 53%;             /* CAT Yellow #FFCD11 */
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    @apply transition-colors duration-200;
+  }
+}
+
+/* 1. Global High-Contrast Inputs */
+input,
+textarea,
+select {
+  opacity: 1;
+}
+
+/* 2. Fully Opaque, High-Contrast Placeholders across themes */
+::placeholder {
+  color: #9CA3AF !important;
+  opacity: 1 !important;
+}
+
+::-webkit-input-placeholder {
+  color: #9CA3AF !important;
+  -webkit-text-fill-color: #9CA3AF !important;
+  opacity: 1 !important;
+}
+
+::-moz-placeholder {
+  color: #9CA3AF !important;
+  opacity: 1 !important;
+}
+
+:-ms-input-placeholder {
+  color: #9CA3AF !important;
+  opacity: 1 !important;
+}
+
+/* Focus state placeholders */
+input:focus::-webkit-input-placeholder,
+textarea:focus::-webkit-input-placeholder {
+  color: #D1D5DB !important;
+  -webkit-text-fill-color: #D1D5DB !important;
+  opacity: 1 !important;
+}
+
+input:focus::placeholder,
+textarea:focus::placeholder {
+  color: #D1D5DB !important;
+  -webkit-text-fill-color: #D1D5DB !important;
+  opacity: 1 !important;
+}
+
+/* 3. WebKit / Chrome Autofill Fix */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #ffffff inset !important;
+  -webkit-text-fill-color: #111827 !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus,
+.dark input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #1a1a1a inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Custom Scrollbar for Industrial Dashboard */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333333;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FFCD11;
+}
+
+/* Glassmorphism utility */
+.glass-panel {
+  background: rgba(30, 30, 30, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel-light {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* CAT Industrial Badge Glow */
+.glow-yellow {
+  box-shadow: 0 0 15px rgba(255, 205, 17, 0.3);
+}
+
+.glow-red {
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+}
